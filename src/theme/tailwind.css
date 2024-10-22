@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "outfl";
+  src: url("/fonts/Outfit-Light.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: "outfm";
+  src: url("/fonts/Outfit-Medium.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  font-family: outfm, sans-serif;
+  --color-cured: 252, 71, 71;
+  font-size: 15px;
+}
+
+ion-item {
+  --background: --var(--color-cubg1);
+}
+
+html {
+  --color-cubg1: 69, 117, 234;
+  --color-cubg2: 180, 190, 25;
+  --color-cuins: 136, 138, 133;
+  --color-cuist: 46, 52, 54;
+  --color-cuclr: 0, 0, 0;
+  --color-tglbg: 22, 29, 47;
+  --toggle-bg: #161d2f;
+  --toggle-fg: #fc4747;
+}
+html[data-theme="dark"] {
+  --color-cubg1: 16, 20, 30;
+  --color-cubg2: 22, 29, 47;
+  --color-cuins: 90, 105, 143;
+  --color-cuist: 255, 255, 255;
+  --color-cuclr: 255, 255, 255;
+  --color-tglbg: 90, 105, 143;
+  --toggle-bg: #5a698f;
+  --toggle-fg: #fc4747;
+}
