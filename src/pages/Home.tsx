@@ -1,48 +1,114 @@
 import {
+  IonButton,
   IonContent,
   IonHeader,
+  IonInput,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import "./Home.css";
+import { useState } from "react";
 
-import useLocalStorage from "use-local-storage";
-import NewToggle from "../components/NewTogle";
-import { Toggle } from "../components/Toggle";
-import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+
+import { validateEmail, validatePassword } from "../lib/Functions";
 
 const Home: React.FC = () => {
-  // const preference = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  // const [isDark, setIsDark] = useLocalStorage("isDark", preference);
+  const navigate = useHistory();
 
-  // function toggleTheme() {
-  //   setIsDark(!isDark);
-  // }
+  const [isTouchedEmail, setIsTouchedEmail] = useState(false);
+  const [isValidEmail, setIsValidEmail] = useState<boolean>();
+  const [isTouchedPassword, setIsTouchedPassword] = useState(false);
+  const [isValidPassword, setIsValidPassword] = useState<boolean>();
 
-  /*
-  useEffect(() => {
-    document
-      .querySelector("html")
-      ?.setAttribute("data-theme", isDark ? "dark" : "light");
-  }, [isDark]);
-*/
+  const emailValidate = (ev: Event) => {
+    const value = (ev.target as HTMLInputElement).value;
+    setIsValidEmail(undefined);
+    if (value === "") return;
+    validateEmail(value) !== null
+      ? setIsValidEmail(true)
+      : setIsValidEmail(false);
+  };
+
+  const passwordValidate = (ev: Event) => {
+    const value = (ev.target as HTMLInputElement).value;
+    setIsValidPassword(undefined);
+    if (value === "") return;
+    validatePassword(value) !== null
+      ? setIsValidPassword(true)
+      : setIsValidPassword(false);
+  };
+
+  const markTouchedEmail = () => {
+    setIsTouchedEmail(true);
+  };
+
+  const markTouchedPassword = () => {
+    setIsTouchedPassword(true);
+  };
+
+  function handleSignUp() {
+    navigate.push("/signup");
+  }
 
   return (
     <IonPage className="ion-no-padding">
       <IonContent fullscreen>
-        <div
-          id="themecontroll"
-          className="w-full h-screen bg-cubg1 text-cuclr relative"
-        >
-          {/* <div className="w-full h-30  flex justify-end">
-            <div className="relative w-48 h-24  ">
-              <Toggle isChecked={isDark} handleChange={toggleTheme} />
-            </div>
-          </div> */}
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="w-1/2 h-full flex">
-              <p className="text-6xl m-auto">Hello World</p>
+        <div className="w-full h-screen bg-cubg1 flex items-center justify-center">
+          <div className="w-[28%] h-[44%] flex flex-col justify-center items-center">
+            <img src="/images/logo.svg" className="w-10 mb-20" />
+            <div className="w-full h-[373px] flex bg-cubg2  rounded-2xl">
+              <div className="p-6 w-full h-full flex flex-col">
+                <div className="w-full h-1/3 text-white">
+                  <p className="text-4xl">Login</p>
+                </div>
+                <div className="w-full h-1/3 text-cuins text-xl">
+                  <IonInput
+                    className={`${isValidEmail && "ion-valid"} ${
+                      isValidEmail === false && "ion-invalid"
+                    } ${isTouchedEmail && "ion-touched"}`}
+                    type="email"
+                    fill="solid"
+                    label="Email"
+                    labelPlacement="floating"
+                    helperText="Enter a valid email"
+                    errorText="Invalid email"
+                    onIonInput={(event) => emailValidate(event)}
+                    onIonBlur={() => markTouchedEmail()}
+                    minlength={10}
+                    clearInput={true}
+                  ></IonInput>
+                  <IonInput
+                    className={`${isValidPassword && "ion-valid"} ${
+                      isValidPassword === false && "ion-invalid"
+                    } ${isTouchedPassword && "ion-touched"}`}
+                    type="password"
+                    fill="solid"
+                    label="Password"
+                    labelPlacement="floating"
+                    helperText="One digit, one lower, one upper, one special. Min 8 chars"
+                    errorText="Invalid password"
+                    onIonInput={(event) => passwordValidate(event)}
+                    onIonBlur={() => markTouchedPassword()}
+                    minlength={8}
+                    maxlength={16}
+                  ></IonInput>
+                </div>
+                <div className="w-full h-1/3 text-cuins">
+                  <IonButton routerLink="/main" expand="block">
+                    Login to your account
+                  </IonButton>
+                  <div className="flex justify-center mt-10">
+                    <p>Dont have an account?</p>
+                    <p
+                      onClick={handleSignUp}
+                      className="text-cured ml-2 hover:cursor-pointer hover:font-bold"
+                    >
+                      Sign Up
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

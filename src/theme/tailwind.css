@@ -15,14 +15,22 @@
   font-style: normal;
 }
 
-:root {
+html {
   font-family: outfm, sans-serif;
-  --color-cured: 252, 71, 71;
   font-size: 15px;
+  --ion-font-family: "outfm", sans-serif;
+  --color-cured: 252, 71, 71;
 }
 
 ion-item {
   --background: --var(--color-cubg1);
+}
+
+ion-button {
+  --background: --var(--color-cured);
+  --color: --var(--color-cubins);
+  --background-hover: --var(--color-cuclr);
+  --color-hover: --var(--color-cubg1);
 }
 
 html {
