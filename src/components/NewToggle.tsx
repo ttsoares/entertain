@@ -16,8 +16,8 @@ const NewToggle = () => {
 
   return (
     <IonItem>
-      <div className="w-full h-full flex justify-end bg-cubg1 ">
-        <div className=" h-full flex ">
+      <div className="w-full py-4 flex justify-end bg-cubg1">
+        <div className="h-full flex ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="bg-cubg1 w-6 stroke-cuclr mr-2"

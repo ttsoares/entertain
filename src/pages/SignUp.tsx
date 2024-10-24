@@ -145,7 +145,15 @@ const Home: React.FC = () => {
                   ></IonInput>
                 </div>
                 <div className="w-full h-1/3 text-cuins">
-                  <IonButton onClick={submitForm} expand="block">
+                  <IonButton
+                    disabled={
+                      isValidEmail === false ||
+                      isValidPassword1 === false ||
+                      isValidPassword2 === false
+                    }
+                    onClick={submitForm}
+                    expand="block"
+                  >
                     Create an account
                   </IonButton>
                   <div className="flex justify-center">

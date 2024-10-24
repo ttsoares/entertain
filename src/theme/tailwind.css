@@ -15,6 +15,10 @@
   font-style: normal;
 }
 
+:root {
+  --ion-background-color: rgb(var(--color-cubg1));
+}
+
 html {
   font-family: outfm, sans-serif;
   font-size: 15px;
@@ -22,15 +26,11 @@ html {
   --color-cured: 252, 71, 71;
 }
 
-ion-item {
-  --background: --var(--color-cubg1);
-}
-
 ion-button {
-  --background: --var(--color-cured);
-  --color: --var(--color-cubins);
-  --background-hover: --var(--color-cuclr);
-  --color-hover: --var(--color-cubg1);
+  --background: rgb(--var(--color-cured));
+  --color: rgb(--var(--color-cubins));
+  --background-hover: rgb(--var(--color-cuclr));
+  --color-hover: rgb(--var(--color-cubg1));
 }
 
 html {
