@@ -8,6 +8,38 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 
+import useResponsiveWidth from "../hooks/winWidth";
+
+import DynamicBackground from "../components/DinBG";
+
+type Trendyng = {
+  small: string;
+  large: string;
+};
+
+type Regular = {
+  small: string;
+  medium: string;
+  large: string;
+};
+
+type Thumbnail = {
+  regular: Regular;
+  trending?: Trendyng;
+};
+
+type Movie = {
+  title: string;
+  thumbnail: Thumbnail;
+  year: string;
+  cetegory: string;
+  rating: string;
+  isBookmarked: boolean;
+  isTrending?: boolean;
+};
+
+import DATA from "../../data.json";
+
 const Main = () => {
   const [home, setHome] = useState(true);
   const [movie, setMovie] = useState(false);
@@ -46,6 +78,8 @@ const Main = () => {
 
     // setResults(data.filter((d) => d.toLowerCase().indexOf(query) > -1));
   };
+
+  const windWidth = useResponsiveWidth();
 
   return (
     <IonPage className="ion-no-padding">
@@ -104,8 +138,23 @@ const Main = () => {
                 onIonInput={(ev) => handleInput(ev)}
               />
             </div>
-            <h1>Trending</h1>
-            <h1>GRID</h1>
+            <div className="h-[235px] w-[150%] border-2 border-red-500 flex justify-between">
+              {DATA.map(
+                (movie, index) =>
+                  movie.isTrending && (
+                    <div
+                      key={index}
+                      className="text-white w-[470px] h-[230px] rounded-xl ml-2"
+                    >
+                      <DynamicBackground
+                        imageUrl={movie.thumbnail.regular.large}
+                        size={windWidth}
+                      />
+                      <p>{movie.title}</p>
+                    </div>
+                  )
+              )}
+            </div>
           </div>
         </div>
       </IonContent>
