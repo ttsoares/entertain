@@ -1,15 +1,24 @@
+import { IonContent, IonPage, IonSearchbar } from "@ionic/react";
+import { useState } from "react";
+
 import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonSearchbar,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
-import React, { useState } from "react";
+  Navigation,
+  Pagination,
+  Scrollbar,
+  FreeMode,
+  A11y,
+} from "swiper/modules";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "swiper/css/free-mode";
 
 import useResponsiveWidth from "../hooks/winWidth";
-
 import DynamicBackground from "../components/DinBG";
 
 type Trendyng = {
@@ -31,20 +40,22 @@ type Thumbnail = {
 type Movie = {
   title: string;
   thumbnail: Thumbnail;
-  year: string;
-  cetegory: string;
+  year: number;
+  category: string;
   rating: string;
   isBookmarked: boolean;
   isTrending?: boolean;
 };
 
 import DATA from "../../data.json";
+const MOVIES = DATA as Movie[];
 
 const Main = () => {
   const [home, setHome] = useState(true);
   const [movie, setMovie] = useState(false);
   const [tv, setTv] = useState(false);
   const [bookmark, setBookmark] = useState(false);
+  const [toggleBM, setToggleBM] = useState(false);
 
   function chooseTV() {
     setHome(false);
@@ -80,6 +91,11 @@ const Main = () => {
   };
 
   const windWidth = useResponsiveWidth();
+
+  function toggleBookMark(index: number) {
+    MOVIES[index].isBookmarked = !MOVIES[index].isBookmarked;
+    setToggleBM(!toggleBM);
+  }
 
   return (
     <IonPage className="ion-no-padding">
@@ -138,22 +154,44 @@ const Main = () => {
                 onIonInput={(ev) => handleInput(ev)}
               />
             </div>
-            <div className="h-[235px] w-[150%] border-2 border-red-500 flex justify-between">
-              {DATA.map(
-                (movie, index) =>
-                  movie.isTrending && (
-                    <div
-                      key={index}
-                      className="text-white w-[470px] h-[230px] rounded-xl ml-2"
-                    >
-                      <DynamicBackground
-                        imageUrl={movie.thumbnail.regular.large}
-                        size={windWidth}
-                      />
-                      <p>{movie.title}</p>
-                    </div>
-                  )
-              )}
+            <div className="h-[235px] w-full border-2 border-red-500 flex justify-between">
+              <Swiper
+                breakpoints={{
+                  340: {
+                    slidesPerView: 2,
+                    spaceBetween: 15,
+                  },
+                  700: {
+                    slidesPerView: 3,
+                    spaceBetween: 15,
+                  },
+                }}
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                spaceBetween={5}
+                freeMode={true}
+                navigation
+                pagination={{ clickable: true }}
+                scrollbar={{ draggable: true }}
+                onSwiper={(swiper) => console.log(swiper)}
+                onSlideChange={() => console.log("slide change")}
+              >
+                {MOVIES.map(
+                  (movie, index) =>
+                    movie.isTrending && (
+                      <SwiperSlide key={index}>
+                        <div className="text-white w-[470px] h-[230px] rounded-xl ml-2">
+                          <DynamicBackground
+                            imageUrl={movie.thumbnail.regular.large}
+                            size={windWidth}
+                            bookmaked={movie.isBookmarked}
+                            toggleBookMark={() => toggleBookMark(index)}
+                          />
+                          <p>{movie.title}</p>
+                        </div>
+                      </SwiperSlide>
+                    )
+                )}
+              </Swiper>
             </div>
           </div>
         </div>
