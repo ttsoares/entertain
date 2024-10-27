@@ -1,13 +1,14 @@
-import { IonContent, IonPage, IonSearchbar } from "@ionic/react";
+import {
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonPage,
+  IonRow,
+  IonSearchbar,
+} from "@ionic/react";
 import { useState } from "react";
 
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  FreeMode,
-  A11y,
-} from "swiper/modules";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -48,7 +49,8 @@ type Movie = {
 };
 
 import DATA from "../../data.json";
-const MOVIES = DATA as Movie[];
+import GridElement from "../components/GridElm";
+export const MOVIES = DATA as Movie[];
 
 const Main = () => {
   const [home, setHome] = useState(true);
@@ -147,14 +149,16 @@ const Main = () => {
               alt="Avatar"
             />
           </div>
-          <div className="w-[86%] h-full bg-cubg1 ">
+          <div className="w-[86%] h-full bg-cubg1 text-white">
             <div>
               <IonSearchbar
+                id="searchbar"
                 debounce={1000}
                 onIonInput={(ev) => handleInput(ev)}
-              />
+                placeholder="Search for movies or TV series"
+              ></IonSearchbar>
             </div>
-            <div className="h-[235px] w-full border-2 border-red-500 flex justify-between">
+            <div className="h-[235px] w-full flex justify-between">
               <Swiper
                 breakpoints={{
                   340: {
@@ -181,8 +185,8 @@ const Main = () => {
                       <SwiperSlide key={index}>
                         <div className="text-white w-[470px] h-[230px] rounded-xl ml-2">
                           <DynamicBackground
-                            imageUrl={movie.thumbnail.regular.large}
-                            size={windWidth}
+                            movieIndex={index}
+                            windowSize={windWidth}
                             bookmaked={movie.isBookmarked}
                             toggleBookMark={() => toggleBookMark(index)}
                           />
@@ -192,6 +196,32 @@ const Main = () => {
                     )
                 )}
               </Swiper>
+            </div>
+            {/* GRID */}
+            <div className="w-full h-full ">
+              <h2 className="text-5xl font-outfl">Recomendad for you</h2>
+              <IonGrid>
+                <IonRow>
+                  {MOVIES.map((movie, index) => (
+                    <IonCol
+                      size-xs="12"
+                      size-sm="6"
+                      size-md="4"
+                      size-lg="3"
+                      key={index}
+                    >
+                      <div className="w-[95%] h-[226px] rounded-xl m-2">
+                        <GridElement
+                          movieIndex={index}
+                          windowSize={windWidth}
+                          bookmaked={movie.isBookmarked}
+                          toggleBookMark={() => toggleBookMark(index)}
+                        />
+                      </div>
+                    </IonCol>
+                  ))}
+                </IonRow>
+              </IonGrid>
             </div>
           </div>
         </div>

@@ -1,12 +1,4 @@
-import {
-  IonButton,
-  IonContent,
-  IonHeader,
-  IonInput,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonButton, IonContent, IonInput, IonPage } from "@ionic/react";
 import { useState } from "react";
 
 import { useHistory } from "react-router-dom";
