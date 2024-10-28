@@ -46,8 +46,8 @@ const Home: React.FC = () => {
   return (
     <IonPage className="ion-no-padding">
       <IonContent fullscreen>
-        <div className="w-full h-full bg-cubg1 flex">
-          <div className="w-[28%] h-[44%] flex flex-col justify-center items-center">
+        <div className="w-full h-full bg-cubg1 flex ">
+          <div className="w-[28%] h-[44%] flex flex-col justify-center items-center  m-auto">
             <img src="/images/logo.svg" className="w-10 mb-20" />
             <div className="w-full h-[373px] flex bg-cubg2  rounded-2xl">
               <div className="p-6 w-full h-full flex flex-col">

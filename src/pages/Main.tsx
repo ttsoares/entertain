@@ -1,5 +1,4 @@
 import {
-  IonCol,
   IonContent,
   IonGrid,
   IonPage,
@@ -22,42 +21,20 @@ import "swiper/css/free-mode";
 import useResponsiveWidth from "../hooks/winWidth";
 import DynamicBackground from "../components/DinBG";
 
-type Trendyng = {
-  small: string;
-  large: string;
-};
+import { useContentStore } from "../store/content";
 
-type Regular = {
-  small: string;
-  medium: string;
-  large: string;
-};
-
-type Thumbnail = {
-  regular: Regular;
-  trending?: Trendyng;
-};
-
-type Movie = {
-  title: string;
-  thumbnail: Thumbnail;
-  year: number;
-  category: string;
-  rating: string;
-  isBookmarked: boolean;
-  isTrending?: boolean;
-};
-
-import DATA from "../../data.json";
 import GridElement from "../components/GridElm";
-export const MOVIES = DATA as Movie[];
+import BookMarkedGrid from "../components/BookMarkedGrid";
 
 const Main = () => {
+  // --------- Global State
+  const CONTENTS = useContentStore((state) => state.media);
+  const toggleBookmark = useContentStore((state) => state.toggleBookmark);
+
   const [home, setHome] = useState(true);
   const [movie, setMovie] = useState(false);
   const [tv, setTv] = useState(false);
   const [bookmark, setBookmark] = useState(false);
-  const [toggleBM, setToggleBM] = useState(false);
 
   function chooseTV() {
     setHome(false);
@@ -92,23 +69,21 @@ const Main = () => {
     // setResults(data.filter((d) => d.toLowerCase().indexOf(query) > -1));
   };
 
+  //Calculate window width
   const windWidth = useResponsiveWidth();
-
-  function toggleBookMark(index: number) {
-    MOVIES[index].isBookmarked = !MOVIES[index].isBookmarked;
-    setToggleBM(!toggleBM);
-  }
 
   return (
     <IonPage className="ion-no-padding">
       <IonContent fullscreen>
         <div className="w-full h-full bg-cubg1 flex mt-[53px]">
           <div className="w-[7%] h-full bg-cubg2 mx-9 pb-5 flex flex-col justify-between ">
-            <div className="flex flex-col items-center space-y-10 py-10 ">
+            <div className="flex flex-col items-center space-y-10 py-10 fill-cuins">
               <img src="/images/logo.svg" className="w-10 mb-20 mx-auto" />
               <svg
                 onClick={chooseHome}
-                className={`${home ? "fill-cuist" : "fill-cuins"}`}
+                className={`${
+                  home ? "fill-cuist" : "fill-cuins"
+                } hover:fill-cured`}
                 width="20"
                 height="20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +92,9 @@ const Main = () => {
               </svg>
               <svg
                 onClick={chooseMovie}
-                className={`${movie ? "fill-cuist" : "fill-cuins"}`}
+                className={`${
+                  movie ? "fill-cuist" : "fill-cuins"
+                } hover:fill-cured`}
                 width="20"
                 height="20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +103,9 @@ const Main = () => {
               </svg>
               <svg
                 onClick={chooseTV}
-                className={`${tv ? "fill-cuist" : "fill-cuins"}`}
+                className={`${
+                  tv ? "fill-cuist" : "fill-cuins"
+                } hover:fill-cured`}
                 width="20"
                 height="20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +114,9 @@ const Main = () => {
               </svg>
               <svg
                 onClick={chooseBookmark}
-                className={`${bookmark ? "fill-cuist" : "fill-cuins"}`}
+                className={`${
+                  bookmark ? "fill-cuist" : "fill-cuins"
+                } hover:fill-cured`}
                 width="17"
                 height="20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -158,70 +139,105 @@ const Main = () => {
                 placeholder="Search for movies or TV series"
               ></IonSearchbar>
             </div>
-            <div className="h-[235px] w-full flex justify-between">
-              <Swiper
-                breakpoints={{
-                  340: {
-                    slidesPerView: 2,
-                    spaceBetween: 15,
-                  },
-                  700: {
-                    slidesPerView: 3,
-                    spaceBetween: 15,
-                  },
-                }}
-                modules={[Navigation, Pagination, Scrollbar, A11y]}
-                spaceBetween={5}
-                freeMode={true}
-                navigation
-                pagination={{ clickable: true }}
-                scrollbar={{ draggable: true }}
-                onSwiper={(swiper) => console.log(swiper)}
-                onSlideChange={() => console.log("slide change")}
-              >
-                {MOVIES.map(
-                  (movie, index) =>
-                    movie.isTrending && (
-                      <SwiperSlide key={index}>
-                        <div className="text-white w-[470px] h-[230px] rounded-xl ml-2">
-                          <DynamicBackground
-                            movieIndex={index}
-                            windowSize={windWidth}
-                            bookmaked={movie.isBookmarked}
-                            toggleBookMark={() => toggleBookMark(index)}
-                          />
-                          <p>{movie.title}</p>
-                        </div>
-                      </SwiperSlide>
-                    )
-                )}
-              </Swiper>
-            </div>
+            {/* Trending */}
+            {home && (
+              <div className="h-[235px] w-full flex flex-col justify-between">
+                <h2 className="text-5xl font-outfl inline mb-2">Trending</h2>
+                <div>
+                  <Swiper
+                    breakpoints={{
+                      340: {
+                        slidesPerView: 2,
+                        spaceBetween: 15,
+                      },
+                      700: {
+                        slidesPerView: 3,
+                        spaceBetween: 15,
+                      },
+                    }}
+                    modules={[Navigation, Pagination, Scrollbar, A11y]}
+                    spaceBetween={5}
+                    freeMode={true}
+                    navigation
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                    onSwiper={(swiper) => console.log(swiper)}
+                    onSlideChange={() => console.log("slide change")}
+                  >
+                    {CONTENTS.map(
+                      (movie, index) =>
+                        movie.isTrending && (
+                          <SwiperSlide key={index}>
+                            <div className="text-white w-[470px] h-[230px] rounded-xl ml-2">
+                              <DynamicBackground
+                                movieIndex={index}
+                                windowSize={windWidth}
+                                bookmaked={movie.isBookmarked}
+                                toggleBookMark={() =>
+                                  toggleBookmark(movie.title)
+                                }
+                              />
+                              <p>{movie.title}</p>
+                            </div>
+                          </SwiperSlide>
+                        )
+                    )}
+                  </Swiper>
+                </div>
+              </div>
+            )}
             {/* GRID */}
             <div className="w-full h-full ">
-              <h2 className="text-5xl font-outfl">Recomendad for you</h2>
-              <IonGrid>
-                <IonRow>
-                  {MOVIES.map((movie, index) => (
-                    <IonCol
-                      size-xs="12"
-                      size-sm="6"
-                      size-md="4"
-                      size-lg="3"
-                      key={index}
-                    >
-                      <div className="w-[95%] h-[226px] rounded-xl m-2">
+              {home && (
+                <h2 className="text-5xl font-outfl mt-14">
+                  Recomended for you
+                </h2>
+              )}
+              {tv && <h2 className="text-5xl font-outfl mt-14">TV Series</h2>}
+              {movie && <h2 className="text-5xl font-outfl mt-14">Movies</h2>}
+
+              {home || movie || tv ? (
+                <IonGrid>
+                  <IonRow>
+                    {home &&
+                      CONTENTS.map((movie, index) => (
                         <GridElement
-                          movieIndex={index}
+                          key={index}
+                          movieTitle={movie.title}
                           windowSize={windWidth}
                           bookmaked={movie.isBookmarked}
-                          toggleBookMark={() => toggleBookMark(index)}
+                          toggleBookMark={() => toggleBookmark(movie.title)}
                         />
-                      </div>
-                    </IonCol>
-                  ))}
-                </IonRow>
-              </IonGrid>
+                      ))}
+                    {movie &&
+                      CONTENTS.filter(
+                        (movie) => movie.category === "Movie"
+                      ).map((movie, index) => (
+                        <GridElement
+                          key={index}
+                          movieTitle={movie.title}
+                          windowSize={windWidth}
+                          bookmaked={movie.isBookmarked}
+                          toggleBookMark={() => toggleBookmark(movie.title)}
+                        />
+                      ))}
+                    {tv &&
+                      CONTENTS.filter(
+                        (movie) => movie.category === "TV Series"
+                      ).map((movie, index) => (
+                        <GridElement
+                          key={index}
+                          movieTitle={movie.title}
+                          windowSize={windWidth}
+                          bookmaked={movie.isBookmarked}
+                          toggleBookMark={() => toggleBookmark(movie.title)}
+                        />
+                      ))}
+                  </IonRow>
+                </IonGrid>
+              ) : (
+                <BookMarkedGrid windWidth={windWidth} />
+              )}
             </div>
           </div>
         </div>
