@@ -1,34 +1,61 @@
 import { IonButton, IonContent, IonInput, IonPage } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { validateEmail, validatePassword } from "../lib/Functions";
 
+interface LocationState {
+  from?: string; // Add a type annotation for location.state
+}
+
 const Home: React.FC = () => {
   const navigate = useHistory();
+
+  const location = useLocation<LocationState>(); // Use the type annotation
+  const comingFrom = location.state?.from;
 
   const [isTouchedEmail, setIsTouchedEmail] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState<boolean>();
   const [isTouchedPassword, setIsTouchedPassword] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState<boolean>();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    // Clear form fields when the component mounts
+    setIsTouchedEmail(false);
+    setIsValidEmail(undefined);
+    setIsTouchedPassword(false);
+    setIsValidPassword(undefined);
+    setEmail("");
+    setPassword("");
+  }, [comingFrom]);
 
   const emailValidate = (ev: Event) => {
+    ev.preventDefault();
     const value = (ev.target as HTMLInputElement).value;
     setIsValidEmail(undefined);
     if (value === "") return;
-    validateEmail(value) !== null
-      ? setIsValidEmail(true)
-      : setIsValidEmail(false);
+    if (validateEmail(value) !== null) {
+      setEmail(value);
+      setIsValidEmail(true);
+    } else {
+      setIsValidEmail(false);
+    }
   };
 
   const passwordValidate = (ev: Event) => {
+    ev.preventDefault();
     const value = (ev.target as HTMLInputElement).value;
     setIsValidPassword(undefined);
     if (value === "") return;
-    validatePassword(value) !== null
-      ? setIsValidPassword(true)
-      : setIsValidPassword(false);
+    if (validatePassword(value) !== null) {
+      setPassword(value);
+      setIsValidPassword(true);
+    } else {
+      setIsValidPassword(false);
+    }
   };
 
   const markTouchedEmail = () => {
@@ -69,6 +96,8 @@ const Home: React.FC = () => {
                     onIonBlur={() => markTouchedEmail()}
                     minlength={10}
                     clearInput={true}
+                    required
+                    value={email}
                   ></IonInput>
                   <IonInput
                     className={`${isValidPassword && "ion-valid"} ${
@@ -84,6 +113,9 @@ const Home: React.FC = () => {
                     onIonBlur={() => markTouchedPassword()}
                     minlength={8}
                     maxlength={16}
+                    clearInput={true}
+                    required
+                    value={password}
                   ></IonInput>
                 </div>
                 <div className="w-full h-1/3 text-cuins">

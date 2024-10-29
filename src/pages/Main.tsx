@@ -160,9 +160,9 @@ const Main = () => {
                 src="/images/image-avatar.png"
                 alt="Avatar"
               />
-              <Link className="text-white hover:underline" to="/home">
+              <button onClick={() => navigate.push("/home", { from: "home" })}>
                 Log Out
-              </Link>
+              </button>
             </div>
           </div>
           <div className="w-[86%] h-full bg-cubg1 text-white">
