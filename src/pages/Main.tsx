@@ -26,6 +26,8 @@ import { useContentStore } from "../store/content";
 import GridElement from "../components/GridElm";
 import BookMarkedGrid from "../components/BookMarkedGrid";
 
+import { Media } from "../store/content";
+
 const Main = () => {
   // --------- Global State
   const CONTENTS = useContentStore((state) => state.media);
@@ -35,6 +37,11 @@ const Main = () => {
   const [movie, setMovie] = useState(false);
   const [tv, setTv] = useState(false);
   const [bookmark, setBookmark] = useState(false);
+  const [search, setSearch] = useState(false);
+  const [searchResult, setSearchResult] = useState<Media[]>([]);
+  const [query, setQuery] = useState("");
+
+  let queryResult: Media[] = [];
 
   function chooseTV() {
     setHome(false);
@@ -62,11 +69,18 @@ const Main = () => {
   }
 
   const handleInput = (ev: Event) => {
-    let query = "";
     const target = ev.target as HTMLIonSearchbarElement;
-    if (target) query = target.value!.toLowerCase();
-
-    // setResults(data.filter((d) => d.toLowerCase().indexOf(query) > -1));
+    if (target.value !== "") {
+      setQuery(target?.value ?? "");
+      const result = CONTENTS.filter((d) => d.title.includes(target.value!));
+      setSearchResult(result);
+      setSearch(true);
+      setHome(false);
+    } else {
+      setSearch(false);
+      setHome(true);
+      setSearchResult([]);
+    }
   };
 
   //Calculate window width
@@ -195,49 +209,59 @@ const Main = () => {
               )}
               {tv && <h2 className="text-5xl font-outfl mt-14">TV Series</h2>}
               {movie && <h2 className="text-5xl font-outfl mt-14">Movies</h2>}
-
-              {home || movie || tv ? (
-                <IonGrid>
-                  <IonRow>
-                    {home &&
-                      CONTENTS.map((movie, index) => (
-                        <GridElement
-                          key={index}
-                          movieTitle={movie.title}
-                          windowSize={windWidth}
-                          bookmaked={movie.isBookmarked}
-                          toggleBookMark={() => toggleBookmark(movie.title)}
-                        />
-                      ))}
-                    {movie &&
-                      CONTENTS.filter(
-                        (movie) => movie.category === "Movie"
-                      ).map((movie, index) => (
-                        <GridElement
-                          key={index}
-                          movieTitle={movie.title}
-                          windowSize={windWidth}
-                          bookmaked={movie.isBookmarked}
-                          toggleBookMark={() => toggleBookmark(movie.title)}
-                        />
-                      ))}
-                    {tv &&
-                      CONTENTS.filter(
-                        (movie) => movie.category === "TV Series"
-                      ).map((movie, index) => (
-                        <GridElement
-                          key={index}
-                          movieTitle={movie.title}
-                          windowSize={windWidth}
-                          bookmaked={movie.isBookmarked}
-                          toggleBookMark={() => toggleBookmark(movie.title)}
-                        />
-                      ))}
-                  </IonRow>
-                </IonGrid>
-              ) : (
-                <BookMarkedGrid windWidth={windWidth} />
+              {search && (
+                <h2 className="text-5xl font-outfl mt-14">{`Found ${searchResult.length} results for "${query}"`}</h2>
               )}
+
+              <IonGrid>
+                <IonRow>
+                  {home &&
+                    CONTENTS.map((movie, index) => (
+                      <GridElement
+                        key={index}
+                        movieTitle={movie.title}
+                        windowSize={windWidth}
+                        bookmaked={movie.isBookmarked}
+                        toggleBookMark={() => toggleBookmark(movie.title)}
+                      />
+                    ))}
+                  {movie &&
+                    CONTENTS.filter((movie) => movie.category === "Movie").map(
+                      (movie, index) => (
+                        <GridElement
+                          key={index}
+                          movieTitle={movie.title}
+                          windowSize={windWidth}
+                          bookmaked={movie.isBookmarked}
+                          toggleBookMark={() => toggleBookmark(movie.title)}
+                        />
+                      )
+                    )}
+                  {tv &&
+                    CONTENTS.filter(
+                      (movie) => movie.category === "TV Series"
+                    ).map((movie, index) => (
+                      <GridElement
+                        key={index}
+                        movieTitle={movie.title}
+                        windowSize={windWidth}
+                        bookmaked={movie.isBookmarked}
+                        toggleBookMark={() => toggleBookmark(movie.title)}
+                      />
+                    ))}
+                  {bookmark && <BookMarkedGrid windWidth={windWidth} />}
+                  {query &&
+                    searchResult.map((movie, index) => (
+                      <GridElement
+                        key={index}
+                        movieTitle={movie.title}
+                        windowSize={windWidth}
+                        bookmaked={movie.isBookmarked}
+                        toggleBookMark={() => toggleBookmark(movie.title)}
+                      />
+                    ))}
+                </IonRow>
+              </IonGrid>
             </div>
           </div>
         </div>

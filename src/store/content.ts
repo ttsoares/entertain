@@ -16,7 +16,7 @@ type Thumbnail = {
   trending?: Trendyng;
 };
 
-type Media = {
+export type Media = {
   title: string;
   thumbnail: Thumbnail;
   year: number;
