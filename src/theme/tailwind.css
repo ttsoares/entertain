@@ -24,18 +24,17 @@ html {
   font-size: 15px;
   --ion-font-family: "outfm", sans-serif;
   --color-cured: 252, 71, 71;
-}
-
-html {
+  --color-white: #fff;
   --color-cubg1: 69, 117, 234;
-  --color-cubg2: 180, 190, 25;
+  --color-cubg2: 17, 41, 100;
   --color-cuins: 136, 138, 133;
-  --color-cuist: 46, 52, 54;
+  --color-cuist: 93, 162, 186;
   --color-cuclr: 0, 0, 0;
   --color-tglbg: 22, 29, 47;
   --toggle-bg: #161d2f;
   --toggle-fg: #fc4747;
 }
+
 html[data-theme="dark"] {
   --color-cubg1: 16, 20, 30;
   --color-cubg2: 22, 29, 47;
@@ -48,10 +47,12 @@ html[data-theme="dark"] {
 }
 
 ion-button {
-  --background: rgb(--var(--color-cured));
-  --color: rgb(--var(--color-cubins));
-  --background-hover: rgb(--var(--color-cuclr));
-  --color-hover: rgb(--var(--color-cubg1));
+  --background: var(--toggle-fg);
+  --color: var(--color-white);
+  --background-hover: #fff;
+  --background-hover-opacity: 100%;
+  --color-hover: #000;
+  text-transform: unset;
 }
 
 #searchbar {

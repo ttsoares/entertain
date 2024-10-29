@@ -1,11 +1,14 @@
 import {
+  IonButton,
   IonContent,
   IonGrid,
   IonPage,
   IonRow,
   IonSearchbar,
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { Link, useHistory } from "react-router-dom";
 
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 // Import Swiper React components
@@ -32,6 +35,8 @@ const Main = () => {
   // --------- Global State
   const CONTENTS = useContentStore((state) => state.media);
   const toggleBookmark = useContentStore((state) => state.toggleBookmark);
+
+  const navigate = useHistory();
 
   const [home, setHome] = useState(true);
   const [movie, setMovie] = useState(false);
@@ -76,6 +81,9 @@ const Main = () => {
       setSearchResult(result);
       setSearch(true);
       setHome(false);
+      setTv(false);
+      setMovie(false);
+      setBookmark(false);
     } else {
       setSearch(false);
       setHome(true);
@@ -85,6 +93,14 @@ const Main = () => {
 
   //Calculate window width
   const windWidth = useResponsiveWidth();
+
+  useEffect(() => {
+    setHome(true);
+    setMovie(false);
+    setTv(false);
+    setBookmark(false);
+    setSearch(false);
+  }, []);
 
   return (
     <IonPage className="ion-no-padding">
@@ -138,11 +154,16 @@ const Main = () => {
                 <path d="M15.387 0c.202 0 .396.04.581.119.291.115.522.295.694.542.172.247.258.52.258.82v17.038c0 .3-.086.573-.258.82a1.49 1.49 0 0 1-.694.542 1.49 1.49 0 0 1-.581.106c-.423 0-.79-.141-1.098-.423L8.46 13.959l-5.83 5.605c-.317.29-.682.436-1.097.436-.202 0-.396-.04-.581-.119a1.49 1.49 0 0 1-.694-.542A1.402 1.402 0 0 1 0 18.52V1.481c0-.3.086-.573.258-.82A1.49 1.49 0 0 1 .952.119C1.137.039 1.33 0 1.533 0h13.854Z" />
               </svg>
             </div>
-            <img
-              className="w-10 h-10 mx-auto"
-              src="/images/image-avatar.png"
-              alt="Avatar"
-            />
+            <div className="flex flex-col items-center">
+              <img
+                className="w-10 h-10 mx-auto"
+                src="/images/image-avatar.png"
+                alt="Avatar"
+              />
+              <Link className="text-white hover:underline" to="/home">
+                Log Out
+              </Link>
+            </div>
           </div>
           <div className="w-[86%] h-full bg-cubg1 text-white">
             <div>

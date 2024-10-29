@@ -47,14 +47,14 @@ const Home: React.FC = () => {
     <IonPage className="ion-no-padding">
       <IonContent fullscreen>
         <div className="w-full h-full bg-cubg1 flex ">
-          <div className="w-[28%] h-[44%] flex flex-col justify-center items-center  m-auto">
+          <div className="w-[28%] h-[70%] flex flex-col justify-center items-center  m-auto ">
             <img src="/images/logo.svg" className="w-10 mb-20" />
-            <div className="w-full h-[373px] flex bg-cubg2  rounded-2xl">
-              <div className="p-6 w-full h-full flex flex-col">
+            <div className="w-full h-full flex bg-cubg2  rounded-2xl">
+              <div className="p-6 w-full h-[90%] flex flex-col">
                 <div className="w-full h-1/3 text-white">
                   <p className="text-4xl">Login</p>
                 </div>
-                <div className="w-full h-1/3 text-cuins text-xl">
+                <div className="w-full h-full text-cuins text-xl">
                   <IonInput
                     className={`${isValidEmail && "ion-valid"} ${
                       isValidEmail === false && "ion-invalid"
@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                   >
                     Login to your account
                   </IonButton>
-                  <div className="flex justify-center mt-10">
+                  <div className="flex justify-center mt-5">
                     <p>Dont have an account?</p>
                     <p
                       onClick={handleSignUp}
