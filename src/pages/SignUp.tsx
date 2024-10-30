@@ -14,14 +14,16 @@ import { useHistory } from "react-router-dom";
 
 import { validateEmail, validatePassword } from "../lib/Functions";
 
-type user = {
+type stateUser = {
   email: string;
   password: string;
 };
 
+import { useUserStore } from "../store/content";
+
 const Home: React.FC = () => {
   const navigate = useHistory();
-  const [user, setUser] = useState<user>({ email: "", password: "" });
+  const [user, setUser] = useState<stateUser>({ email: "", password: "" });
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [isTouchedEmail, setIsTouchedEmail] = useState(false);
@@ -31,6 +33,8 @@ const Home: React.FC = () => {
   const [isTouchedPassword2, setIsTouchedPassword2] = useState(false);
   const [isValidPassword2, setIsValidPassword2] = useState<boolean>();
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const { users, addUser } = useUserStore();
 
   const emailValidate = (ev: Event) => {
     const value = (ev.target as HTMLInputElement).value;
@@ -79,6 +83,8 @@ const Home: React.FC = () => {
 
   function submitForm() {
     if (password1 === password2) {
+      setUser({ ...user, password: password1 });
+      addUser({ email: user.email, password: password1 });
       navigate.push("/home");
     } else {
       setShowModal(true);
@@ -90,15 +96,15 @@ const Home: React.FC = () => {
   return (
     <IonPage className="ion-no-padding">
       <IonContent fullscreen>
-        <div className="w-full h-screen bg-cubg1 flex items-center justify-center">
-          <div className="w-[28%] h-[44%] flex flex-col justify-center items-center">
+        <div className="w-full h-full bg-cubg1 flex">
+          <div className="w-[28%] h-[70%] flex flex-col justify-center items-center m-auto">
             <img src="/images/logo.svg" className="w-10 mb-20" />
-            <div className="w-full h-[373px] flex bg-cubg2 rounded-2xl">
-              <div className="p-6 w-full h-full flex flex-col">
+            <div className="w-full h-full flex bg-cubg2 rounded-2xl">
+              <div className="p-6 w-full h-[90%] flex flex-col">
                 <div className="w-full h-1/3 text-white">
                   <p className="text-4xl">Sign Up</p>
                 </div>
-                <div className="w-full h-1/3 text-cuins">
+                <div className="w-full h-full text-cuins text-xl">
                   <IonInput
                     className={`${isValidEmail && "ion-valid"} ${
                       isValidEmail === false && "ion-invalid"

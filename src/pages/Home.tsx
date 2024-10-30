@@ -9,10 +9,14 @@ interface LocationState {
   from?: string; // Add a type annotation for location.state
 }
 
+import { useUserStore, User } from "../store/content";
+
 const Home: React.FC = () => {
   const navigate = useHistory();
 
-  const location = useLocation<LocationState>(); // Use the type annotation
+  const { getUserByEmail } = useUserStore();
+
+  const location = useLocation<LocationState>();
   const comingFrom = location.state?.from;
 
   const [isTouchedEmail, setIsTouchedEmail] = useState(false);
@@ -23,7 +27,6 @@ const Home: React.FC = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    // Clear form fields when the component mounts
     setIsTouchedEmail(false);
     setIsValidEmail(undefined);
     setIsTouchedPassword(false);
@@ -33,7 +36,6 @@ const Home: React.FC = () => {
   }, [comingFrom]);
 
   const emailValidate = (ev: Event) => {
-    ev.preventDefault();
     const value = (ev.target as HTMLInputElement).value;
     setIsValidEmail(undefined);
     if (value === "") return;
@@ -46,7 +48,6 @@ const Home: React.FC = () => {
   };
 
   const passwordValidate = (ev: Event) => {
-    ev.preventDefault();
     const value = (ev.target as HTMLInputElement).value;
     setIsValidPassword(undefined);
     if (value === "") return;
@@ -68,6 +69,17 @@ const Home: React.FC = () => {
 
   function handleSignUp() {
     navigate.push("/signup");
+  }
+
+  function validateUser() {
+    const foundUser = getUserByEmail(email);
+    if (foundUser) {
+      if (foundUser.password === password) {
+        navigate.push("/main");
+      }
+    } else {
+      console.log("No user found");
+    }
   }
 
   return (
@@ -97,7 +109,6 @@ const Home: React.FC = () => {
                     minlength={10}
                     clearInput={true}
                     required
-                    value={email}
                   ></IonInput>
                   <IonInput
                     className={`${isValidPassword && "ion-valid"} ${
@@ -114,14 +125,12 @@ const Home: React.FC = () => {
                     minlength={8}
                     maxlength={16}
                     clearInput={true}
-                    required
-                    value={password}
                   ></IonInput>
                 </div>
                 <div className="w-full h-1/3 text-cuins">
                   <IonButton
                     disabled={!isValidEmail || !isValidPassword}
-                    routerLink="/main"
+                    onClick={validateUser}
                     expand="block"
                   >
                     Login to your account

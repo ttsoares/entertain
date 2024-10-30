@@ -1,5 +1,16 @@
 import { create } from "zustand";
 
+export type User = {
+  email: string;
+  password: string;
+};
+
+type UserStore = {
+  users: User[];
+  addUser: (user: User) => void;
+  getUserByEmail: (email: string) => User | undefined;
+};
+
 type Trendyng = {
   small: string;
   large: string;
@@ -43,4 +54,15 @@ export const useContentStore = create<CounterStore>((set) => ({
         return m;
       }),
     })),
+}));
+
+// Create the Zustand store
+export const useUserStore = create<UserStore>((set, get) => ({
+  users: [],
+  addUser: (user: User) =>
+    set((state) => ({
+      users: [...state.users, user],
+    })),
+  getUserByEmail: (email: string) =>
+    get().users.find((user) => user.email === email),
 }));
