@@ -26,7 +26,7 @@ html {
   --color-cured: 252, 71, 71;
   --color-white: #fff;
   --color-cubg1: 69, 117, 234;
-  --color-cubg2: 17, 41, 100;
+  --color-cubg2: 20, 53, 132;
   --color-cuins: 136, 138, 133;
   --color-cuist: 93, 162, 186;
   --color-cuclr: 0, 0, 0;
@@ -65,7 +65,16 @@ ion-button {
 
   --border-radius: 13px !important;
 }
-/*
-ion-grid {
-  --ion-grid-padding: 0;
-} */
+
+ion-toast.custom-toast {
+  --background: rgb(var(--color-cubg2));
+  --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  --border-radius: 10px;
+  --color: rgb(var(--color-cured));
+}
+
+ion-toast.custom-toast::part(message) {
+  font-style: italic;
+  font-size: 20px;
+  font: bold;
+}

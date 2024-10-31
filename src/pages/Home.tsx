@@ -1,4 +1,13 @@
-import { IonButton, IonContent, IonInput, IonPage } from "@ionic/react";
+import {
+  IonButton,
+  IonContent,
+  IonInput,
+  IonPage,
+  IonToast,
+} from "@ionic/react";
+
+import { alertCircle } from "ionicons/icons";
+
 import { useEffect, useState } from "react";
 
 import { useHistory, useLocation } from "react-router-dom";
@@ -10,6 +19,7 @@ interface LocationState {
 }
 
 import { useUserStore, User } from "../store/content";
+import Toast from "../components/Toast";
 
 const Home: React.FC = () => {
   const navigate = useHistory();
@@ -25,6 +35,8 @@ const Home: React.FC = () => {
   const [isValidPassword, setIsValidPassword] = useState<boolean>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showToastEmail, setShowToastEmail] = useState(false);
+  const [showToastPassword, setShowToastPassword] = useState(false);
 
   useEffect(() => {
     setIsTouchedEmail(false);
@@ -76,9 +88,11 @@ const Home: React.FC = () => {
     if (foundUser) {
       if (foundUser.password === password) {
         navigate.push("/main");
+      } else {
+        setShowToastPassword(true);
       }
     } else {
-      console.log("No user found");
+      setShowToastEmail(true);
     }
   }
 
@@ -139,7 +153,7 @@ const Home: React.FC = () => {
                     <p>Dont have an account?</p>
                     <p
                       onClick={handleSignUp}
-                      className="text-cured ml-2 hover:cursor-pointer hover:font-bold"
+                      className="text-cured ml-2 hover:cursor-pointer hover:underline"
                     >
                       Sign Up
                     </p>
@@ -149,6 +163,16 @@ const Home: React.FC = () => {
             </div>
           </div>
         </div>
+        <Toast
+          message="Email not found..."
+          showToast={showToastEmail}
+          setShowToast={setShowToastEmail}
+        />
+        <Toast
+          message="Password is incorrect..."
+          showToast={showToastPassword}
+          setShowToast={setShowToastPassword}
+        />
       </IonContent>
     </IonPage>
   );

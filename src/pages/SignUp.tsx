@@ -7,6 +7,7 @@ import {
   IonModal,
   IonPage,
   IonTitle,
+  IonToast,
   IonToolbar,
 } from "@ionic/react";
 import { useState } from "react";
@@ -20,6 +21,7 @@ type stateUser = {
 };
 
 import { useUserStore } from "../store/content";
+import Toast from "../components/Toast";
 
 const Home: React.FC = () => {
   const navigate = useHistory();
@@ -32,7 +34,9 @@ const Home: React.FC = () => {
   const [isValidPassword1, setIsValidPassword1] = useState<boolean>();
   const [isTouchedPassword2, setIsTouchedPassword2] = useState(false);
   const [isValidPassword2, setIsValidPassword2] = useState<boolean>();
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showPasswordsNotEqual, setShowPasswordsNotEqual] =
+    useState<boolean>(false);
+  const [userCreated, setUserCreated] = useState<boolean>(false);
 
   const { users, addUser } = useUserStore();
 
@@ -85,9 +89,10 @@ const Home: React.FC = () => {
     if (password1 === password2) {
       setUser({ ...user, password: password1 });
       addUser({ email: user.email, password: password1 });
+      setUserCreated(true);
       navigate.push("/home");
     } else {
-      setShowModal(true);
+      setShowPasswordsNotEqual(true);
       setPassword1("");
       setPassword2("");
     }
@@ -164,7 +169,12 @@ const Home: React.FC = () => {
                   </IonButton>
                   <div className="flex justify-center">
                     <p>Have an account?</p>
-                    <p className="text-cured">Login</p>
+                    <p
+                      onClick={() => navigate.push("/home")}
+                      className="text-cured hover:underline hover:cursor-pointer ml-2"
+                    >
+                      Login
+                    </p>
                   </div>
                 </div>
               </div>
@@ -172,20 +182,17 @@ const Home: React.FC = () => {
           </div>
         </div>
       </IonContent>
-      {/* Modal */}
-      <IonModal isOpen={showModal}>
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Modal</IonTitle>
-            <IonButtons slot="end">
-              <IonButton onClick={() => setShowModal(false)}>Close</IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent className="ion-padding">
-          <p>Those two password you typed are not equal !</p>
-        </IonContent>
-      </IonModal>
+      {/* Toasts */}
+      <Toast
+        showToast={showPasswordsNotEqual}
+        setShowToast={setShowPasswordsNotEqual}
+        message="Those two password you typed are not equal !"
+      />
+      <Toast
+        message="New user created successfully !"
+        showToast={userCreated}
+        setShowToast={setUserCreated}
+      />
     </IonPage>
   );
 };
