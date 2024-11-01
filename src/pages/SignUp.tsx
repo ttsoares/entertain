@@ -1,17 +1,9 @@
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonInput,
-  IonModal,
-  IonPage,
-  IonTitle,
-  IonToast,
-  IonToolbar,
-} from "@ionic/react";
+import { IonButton, IonContent, IonInput, IonPage } from "@ionic/react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+
+import * as bcrypt from "bcryptjs";
+const salt = bcrypt.genSaltSync(10);
 
 import { validateEmail, validatePassword } from "../lib/Functions";
 
@@ -87,8 +79,8 @@ const Home: React.FC = () => {
 
   function submitForm() {
     if (password1 === password2) {
-      setUser({ ...user, password: password1 });
-      addUser({ email: user.email, password: password1 });
+      const hash = bcrypt.hashSync(password1, salt);
+      addUser({ email: user.email, password: hash });
       setUserCreated(true);
       navigate.push("/home");
     } else {
@@ -186,9 +178,11 @@ const Home: React.FC = () => {
       <Toast
         showToast={showPasswordsNotEqual}
         setShowToast={setShowPasswordsNotEqual}
+        kind="toast-error"
         message="Those two password you typed are not equal !"
       />
       <Toast
+        kind="toast-success"
         message="New user created successfully !"
         showToast={userCreated}
         setShowToast={setUserCreated}

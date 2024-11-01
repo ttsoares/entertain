@@ -1,12 +1,4 @@
-import {
-  IonButton,
-  IonContent,
-  IonInput,
-  IonPage,
-  IonToast,
-} from "@ionic/react";
-
-import { alertCircle } from "ionicons/icons";
+import { IonButton, IonContent, IonInput, IonPage } from "@ionic/react";
 
 import { useEffect, useState } from "react";
 
@@ -18,8 +10,10 @@ interface LocationState {
   from?: string; // Add a type annotation for location.state
 }
 
-import { useUserStore, User } from "../store/content";
+import { useUserStore } from "../store/content";
 import Toast from "../components/Toast";
+
+import * as bcrypt from "bcryptjs";
 
 const Home: React.FC = () => {
   const navigate = useHistory();
@@ -86,7 +80,10 @@ const Home: React.FC = () => {
   function validateUser() {
     const foundUser = getUserByEmail(email);
     if (foundUser) {
-      if (foundUser.password === password) {
+      const passOK = bcrypt.compareSync(password, foundUser.password);
+
+      console.log("OK ? ", passOK);
+      if (passOK) {
         navigate.push("/main");
       } else {
         setShowToastPassword(true);
@@ -164,11 +161,13 @@ const Home: React.FC = () => {
           </div>
         </div>
         <Toast
+          kind="toast-error"
           message="Email not found..."
           showToast={showToastEmail}
           setShowToast={setShowToastEmail}
         />
         <Toast
+          kind="toast-error"
           message="Password is incorrect..."
           showToast={showToastPassword}
           setShowToast={setShowToastPassword}

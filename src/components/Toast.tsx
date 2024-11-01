@@ -6,13 +6,19 @@ interface ToastProps {
   message: string;
   showToast: boolean;
   setShowToast: Dispatch<SetStateAction<boolean>>;
+  kind: string;
 }
 
-const Toast: React.FC<ToastProps> = ({ message, showToast, setShowToast }) => {
+const Toast: React.FC<ToastProps> = ({
+  message,
+  kind,
+  showToast,
+  setShowToast,
+}) => {
   return (
     <IonToast
       icon={alertCircle}
-      className="custom-toast"
+      className={`${kind}`}
       isOpen={showToast}
       message={message}
       onDidDismiss={() => setShowToast(false)}

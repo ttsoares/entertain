@@ -66,14 +66,21 @@ ion-button {
   --border-radius: 13px !important;
 }
 
-ion-toast.custom-toast {
+ion-toast.toast-error {
   --background: rgb(var(--color-cubg2));
   --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
   --border-radius: 10px;
   --color: rgb(var(--color-cured));
 }
 
-ion-toast.custom-toast::part(message) {
+ion-toast.toast-success {
+  --background: rgb(var(--color-cubg2));
+  --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  --border-radius: 10px;
+  --color: rgb(var(--color-cuclr));
+}
+
+ion-toast::part(message) {
   font-style: italic;
   font-size: 20px;
   font: bold;
