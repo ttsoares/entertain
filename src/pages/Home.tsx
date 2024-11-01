@@ -1,19 +1,16 @@
 import { IonButton, IonContent, IonInput, IonPage } from "@ionic/react";
-
 import { useEffect, useState } from "react";
-
 import { useHistory, useLocation } from "react-router-dom";
 
-import { validateEmail, validatePassword } from "../lib/Functions";
-
-interface LocationState {
-  from?: string; // Add a type annotation for location.state
-}
-
-import { useUserStore } from "../store/content";
 import Toast from "../components/Toast";
+import { validateEmail, validatePassword } from "../lib/Functions";
+import { useUserStore } from "../store/content";
 
 import * as bcrypt from "bcryptjs";
+
+interface LocationState {
+  from?: string; // for location.state
+}
 
 const Home: React.FC = () => {
   const navigate = useHistory();

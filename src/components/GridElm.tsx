@@ -28,9 +28,9 @@ const GridElement = ({
 
   return (
     <IonCol size-xs="12" size-sm="6" size-md="4" size-lg="3">
-      <div className="w-[95%] h-[226px] rounded-xl m-2 group">
+      <div className="w-[95%] h-[226px] rounded-xl  m-2 group">
         <div
-          className="w-full h-[75%] bg-cover bg-center flex justify-center items-center relative text-lg text-white"
+          className="w-full h-[75%] bg-cover bg-center flex justify-center items-center relative text-lg text-white rounded-xl hover:scale-105 duration-300"
           style={{ backgroundImage: `url(${newURL})` }}
         >
           <svg
