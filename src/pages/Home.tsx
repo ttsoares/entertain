@@ -78,8 +78,6 @@ const Home: React.FC = () => {
     const foundUser = getUserByEmail(email);
     if (foundUser) {
       const passOK = bcrypt.compareSync(password, foundUser.password);
-
-      console.log("OK ? ", passOK);
       if (passOK) {
         navigate.push("/main");
       } else {

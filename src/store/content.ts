@@ -56,7 +56,6 @@ export const useContentStore = create<CounterStore>((set) => ({
     })),
 }));
 
-// Create the Zustand store
 export const useUserStore = create<UserStore>((set, get) => ({
   users: [],
   addUser: (user: User) =>
